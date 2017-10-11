@@ -204,17 +204,26 @@ coeficiente (c,p) posicion = [l | (l,n) <- zip p [c - 1, c-2..0], n == posicion]
 
 
 
+-- videojuego y pelicula se estarna enlazando por una llave primaria-foranea
+type Pelicula = (Int,String,Int) -- <LlaveForanea con VideoClub,nombre de la pelicula,nro de copias que le estan sacando>
+type Cliente = (String,[Pelicula]) -- <nombre del cliente, listas de peliculas>
+type VideoClub = (Int,[Cliente],[Pelicula]) -- <[lista de todos los clientes], [catalogo de peliculas]>
+
 
 
 
 --a. clientes :: VideoClub -> [Cliente], que devuelve una lista con los clientes registrados en el videoclub.
+listarClientes::VideoClub->[Cliente]
+listarClientes (_,clx,_) = [e | e <-clx]
 
 
 
 
 --b. películas :: VideoClub -> [Película], que devuelve una lista con las películas que están en el catálogo de videoclub, independientemente de si está disponible o no.
+listarPeliculas::VideoClub->[Pelicula]
+listarPeliculas (_, _,pelix) = [e | e <-pelix]
 
-
+-- example listarPeliculas (1,[],[(1,"viti",2),(1,"monos",4)])
 
 
 
@@ -223,23 +232,37 @@ coeficiente (c,p) posicion = [l | (l,n) <- zip p [c - 1, c-2..0], n == posicion]
 --película tiene el videoclub (esta función se indefine, o sea da error, si la película no
 --pertenece al catálogo del videoclub).
 
+-- explicacion:
+-- cada pelicula guardara el numero de copias que le estan haciendo
+-- y ademas de que quien le esta haciendo , identificando cada videoclub con un a llave primaria
+-- derivandola en la pelicula como llave foranea, por lo tanto si no coinciden las claves
+-- simplemente no pertenecenny bota error->
+cantidadCopias::VideoClub->Pelicula->Int
+cantidadCopias  (idVideoClub,_,_ )(idForanea,_,nrocopias) | idVideoClub /= idForanea = error "dicha pelicula pertence a otro catalogo"
+													| otherwise = nrocopias
+
+-- example cantidadCopias (1,[],[]) (1,"viti",32)
 
 
 
 
 
 
-
-
-
---d. p elıcu lasA lq u ilad as :: Videoclub -> Cliente -> [Película], que devuelve una lista de
+--d. pelıculas Alquiladas :: Videoclub -> Cliente -> [Película], que devuelve una lista de
 --películas que el cliente tiene alquiladas en el videoclub (esta función se indefine si el
 --cliente no está registrado en el videoclub). El cliente puede alquilar más de una copia de
 --la misma película.
 
+pertenece::VideoClub->Cliente->Bool
+pertenece (id,[], pelix) (name,pelixal) = False
+pertenece (id, (cli:clix) ,pelix ) (name, pelixal) |  (name == cli) = True
+																	| otherwise = pertenece (id,(clix),pelix) (name,pelixal)
 
 
 
+peliculasAlquiladas::VideoClub->Cliente->[Pelicula]
+peliculasAlquiladas (idVideoClub,clix,pelix) (name,pelixalq) | not ( pertenece (idVideoClub,clix,pelix) (name,pelixalq) ) = error "el cliente no pertenece"
+																	| otherwise = [(1,"test",34)]
 
 
 
@@ -266,6 +289,10 @@ coeficiente (c,p) posicion = [l | (l,n) <- zip p [c - 1, c-2..0], n == posicion]
 --disponible para ser alquilada en el videoclub (por ejemplo, una película puede estar en
 --un videoclub pero no estar disponible porque todas sus copias están alquiladas, o no
 --estar disponible porque no está en el catálogo).
+
+
+
+
 --Dada la crisis económica los videoclubs más pequeños han decidido unirse en una red para
 --brindar servicios adicionales al cliente como, por ejemplo, distribución a domicilio y
 --compartir el conjunto de películas que disponen. Debido a esto se pide que definas las
