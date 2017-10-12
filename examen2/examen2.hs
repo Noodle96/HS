@@ -90,62 +90,59 @@
 
 
 
-
-
---4. Implementar el nuevo tipo Vector y las funciones:
-type Vector = (Float,Float)
---a.abscisa :: Vectores -> Float
--- fromato predefiindo
-abscisa::Vector->Float
-abscisa (abscisa,ordenada) = abscisa
+{-------------------------------------------Problema 4---------------------------------------------}
+{--------------------------------------------------------------------------------------------------}
+{--------------------------------------------------------------------------------------------------}
 
 
 
---b.ordenada :: Vectores -> Float
-ordenada::Vector->Float
-ordenada (abscisa,ordenada) = ordenada
+data TVector = AVector Float Float deriving Show
 
 
 
---c.igualX (Vector v1 v2 ) con resultado un Bool.
-igualX::Vector->Vector->Bool
-igualX v1 v2 | abscisa v1 == abscisa v2 = True
-					| otherwise = False
+--a.-abscisa :: Vectores -> Float
+abscisa::TVector->Float
+abscisa (AVector a b) = a
+
+
+--b.-ordenada :: Vectores -> Float
+ordenada::TVector->Float
+ordenada (AVector a b) = b
+
+
+--c.-igualX (Vector v1 v2 ) con resultado un Bool.
+igualX::TVector->TVector->Bool
+igualX (AVector a b ) (AVector c d) = abscisa (AVector a b) == abscisa (AVector c d)
+
+
+--d.-igualY (Vector v1 v2 ) con resultado un Bool.
+igualY::TVector->TVector->Bool
+igualY (AVector a b ) (AVector c d) = ordenada (AVector a b) == ordenada (AVector c d)
+
+
+--e.-colineales (: Vector v1 v2) con un resultado un Bool.(pendientes iguales)
+colineales::TVector->TVector->Bool
+colineales (AVector a b) (AVector c d) = ordenada (AVector a b) / abscisa (AVector a b) == ordenada (AVector c d) / abscisa (AVector c d)
+
+
+--f.-norma ( Vector v)
+norma::TVector->Float
+norma (AVector a b) = sqrt(x^2 + b^2)
+		where x = abscisa (AVector a b)
+
+
+--g.- productoEscalar ( Vector v1, v2)
+{-El producto escalar de dos vectores es un número real que resulta al multiplicar el producto
+ de sus módulos por el coseno del ángulo que forman.-}
+productoEscalar::TVector->TVector->Float->Float
+productoEscalar (AVector a b) (AVector c d) angulo = norma (AVector a b) * norma (AVector c d) * cos(angulo)
 
 
 
 
---d.igualY (Vector v1 v2 ) con resultado un Bool.
-igualY::Vector->Vector->Bool
-igualY v1 v2 | ordenada v1 == ordenada v2 = True
-					|otherwise = False
-
-
-
-
---e.colineales (: Vector v1 v2) con un resultado un Bool.
-colineales::Vector->Vector->Bool
-colineales v1 v2 | (ordenada v1 / abscisa v1) == (ordenada v2 / abscisa v2) = True
-						| otherwise = False
-
-
-
-
-
-
-
---f.norma ( Vector v)
--- o modulo
-norma::Vector->Float
-norma v = sqrt((abscisa v )^2 + (ordenada v)^2 )
-
-
-
---g.productoEscalar ( Vector v1, v2)
-{-El producto escalar de dos vectores es un número real que resulta al multiplicar el producto de sus módulos por el coseno del ángulo que forman.-}
-productoEscalar::Vector->Vector->Float->Float
---productoEscalar<v1,v2,angulo,productoEscalar>
-productoEscalar v1 v2 angulo =  norma v1 * norma v2 * cos(angulo)
+{--------------------------------------------------------------------------------------------------}
+{--------------------------------------------------------------------------------------------------}
+{--------------------------------------------------------------------------------------------------}
 
 
 
@@ -154,38 +151,49 @@ productoEscalar v1 v2 angulo =  norma v1 * norma v2 * cos(angulo)
 
 
 
---6. Implementar el nuevo tipo Polinomio y las funciones :
-type Polinomio = (Int,[Float])-- <grado,[Lista de coeficientes]>
---a. grado :: Polinomio -> Float
+
+
+
+
+
+{------------------------------------------Problema 6 ---------------------------------------------}
+{--------------------------------------------------------------------------------------------------}
+{--------------------------------------------------------------------------------------------------}
+
+
+
+
+
+type Polinomio = [Float]
+
+--a.- grado::Polinomio->Int
 grado::Polinomio->Int
-grado (grado,_) = grado
-
-
+grado px = length px - 1
 
 
 
 --b. coeficiente :: Polinomio -> Int -> Float
-coeficiente::Polinomio->Int->[Float]
--- <polinomio,posicion,Coeficiente
-coeficiente (c,p) posicion = [l | (l,n) <- zip p [c - 1, c-2..0], n == posicion]
+coeficiente::Polinomio->Int->Float
+coeficiente px pos = head [l | (l,exp)<-zip px [(length px) - 1, (length px)-2..0], exp == pos]
 
 
-
-
+posicion::Polinomio->Int->Float
+posicion px pos = head[l | (l,exp)<-zip px [0..length px], exp == pos]
 
 
 --c. evaluar :: Polinomio -> Float -> Float , que devuelve el valor del polinomio en el punto dado.
---evaluar::Polinomio->Float->Float
--- <polinomio,la x, resultado>
---evaluar (0,(x:px)) valor = 0
---evaluar (c,(x:px))  valor | length px == 0 = 0
---									otherwise = valor * evaluar
+-- <polinomio,grado, la t, resultado>
+evaluar::Polinomio->Int->Float->Float
+evaluar px  gr  t | gr == 0 = head px
+					| otherwise = (t * evaluar px (gr-1) t) + posicion px gr
+
+--
 
 
 
-
-
-
+{--------------------------------------------------------------------------------------------------}
+{--------------------------------------------------------------------------------------------------}
+{--------------------------------------------------------------------------------------------------}
 
 
 
@@ -253,16 +261,16 @@ cantidadCopias  (idVideoClub,_,_ )(idForanea,_,nrocopias) | idVideoClub /= idFor
 --cliente no está registrado en el videoclub). El cliente puede alquilar más de una copia de
 --la misma película.
 
-pertenece::VideoClub->Cliente->Bool
-pertenece (id,[], pelix) (name,pelixal) = False
-pertenece (id, (cli:clix) ,pelix ) (name, pelixal) |  (name == cli) = True
-																	| otherwise = pertenece (id,(clix),pelix) (name,pelixal)
+--pertenece::VideoClub->Cliente->Bool
+--pertenece (id,[], pelix) (name,pelixal) = False
+--pertenece (id, (cli:clix) ,pelix ) (name, pelixal) |  (name == cli) = True
+																	-- | otherwise = pertenece (id,(clix),pelix) (name,pelixal)
 
 
 
-peliculasAlquiladas::VideoClub->Cliente->[Pelicula]
-peliculasAlquiladas (idVideoClub,clix,pelix) (name,pelixalq) | not ( pertenece (idVideoClub,clix,pelix) (name,pelixalq) ) = error "el cliente no pertenece"
-																	| otherwise = [(1,"test",34)]
+--peliculasAlquiladas::VideoClub->Cliente->[Pelicula]
+--peliculasAlquiladas (idVideoClub,clix,pelix) (name,pelixalq) | not ( pertenece (idVideoClub,clix,pelix) (name,pelixalq) ) = error "el cliente no pertenece"
+--																	| otherwise = [(1,"test",34)]
 
 
 
