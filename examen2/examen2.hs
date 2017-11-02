@@ -1,20 +1,31 @@
---
---	examen 2
---
-
-
--- 2. Definir las siguientes funciones sobre listas de caracteres:
-
---a. sacarTodos :: [Char] -> [Char] -> [Char], que elimina todas las apariciones de la primer
---lista en la segunda. Por ejemplo sacarTodos [c, a] [a, c, a, d, c, a] es [a, d].
+{------------------------------------------Examen2-------------------------------------------------}
+{--------------------------------------------------------------------------------------------------}
+{--------------------------------------------------------------------------------------------------}
 
 
 
 
+{--------------------------------------------------------------------------------------------------}
+{------------------------------------------Problema 2 ---------------------------------------------}
+{--------------------------------------------------------------------------------------------------}
 
---b. sacarBlancosRepetidos :: [Char] -> [Char], que reemplaza cada subsecuencia de
---blancos contiguos del primer parámetro por un solo blanco en el segundo parámetro.
+
+
+
+--a. sacarTodos :: [Char] -> [Char] -> [Char], que elimina todas las apariciones de la primer lista
+--en la segunda. Por ejemplo sacarTodos [c, a] [a, c, a, d, c, a] es [a, d].
+
+
+
+
+
+
+
+
+--b. sacarBlancosRepetidos :: [Char] -> [Char], que reemplaza cada subsecuencia de blancos contiguos
+-- del primer parámetro por un solo blanco en el segundo parámetro.
 --sacarBlancosRepetidos::[Char]->[Char]
+
 --sacarBlancosRepetidos [] = []
 --sacarBlancosRepetidos (x:y:zs) | x /=  ' '= [x] ++ sacarBlancosRepetidos (y:zs)
 --										| y /= ' ' = [x] ++ sacarBlancosRepetidos (y:zs)
@@ -24,8 +35,17 @@
 
 
 
+
+
+
+
+
 --c. contarPalabras :: [Char] ->Integer, que devuelve la cantidad de palabras del parámetro.
 --cantPalaras::[Char]->Integer
+
+
+
+
 
 
 
@@ -33,12 +53,28 @@
 
 
 
+
+
+
+
 --e. aplanar :: [[Char]] -> [Char], que a partir de una lista de palabras arma una lista de
 --caracteres concatenándolas.
 
 
+
+
+
+
+
+
 --f. aplanarConBlancos :: [[Char]] -> [Char], que a partir de una lista de palabras, arma una
 --lista de caracteres concatenándolas e insertando un blanco entre cada par.
+
+
+
+
+
+
 
 
 --g. aplanarConNBlancos :: [[Char]] -> Integer -> [Char], que a partir de una lista de
@@ -64,24 +100,9 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+{--------------------------------------------------------------------------------------------------}
+{--------------------------------------------------------------------------------------------------}
+{--------------------------------------------------------------------------------------------------}
 
 
 
@@ -334,15 +355,6 @@ cantidadCopias  (idVideoClub,_,_ )(idForanea,_,nrocopias) | idVideoClub /= idFor
 
 --j. clientesRaros :: [Videoclub] ->[Cliente], que devuelve la lista de clientes que tienen
 --alquilada la misma película en distintos videoclubs.
-
-
-
-
-
-
-
-
-
 
 
 

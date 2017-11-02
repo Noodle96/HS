@@ -1,56 +1,34 @@
-data Complejos = Monos Float Float deriving Show
---data Person = Person String String Int Float String String deriving (Show)
+data TQuebrado = AQuebrado Integer Integer deriving Show
 
-real::Complejos->Float
-real (Monos a b ) = a
+euclides::Integer->Integer->Integer
+euclides a 0 = a
+euclides a b = euclides b (a `mod` b)
 
-suma::Complejos->Complejos->Complejos
-suma (Monos a b) (Monos c d) = Monos (a+c) (b+d)
+numerador::TQuebrado->Integer
+numerador (AQuebrado  a b) = a
 
-producto::Complejos->Complejos->Complejos
-producto (Monos a b) (Monos c d) = Monos (a*c - b*d) (a*d + b*c)
+denominador::TQuebrado->Integer
+denominador (AQuebrado a b) = b
 
-
-
-data Dias = Lunes | Martes | Miercoles | Jueves | Viernes | Sabado | Domingo  deriving Eq
-finSemana::Dias->Bool
-{-
--- finSemana Sabado = True
--- finSemana Domingo = True
--- finSemana _ = False -}
-finSemana dia | dia == Sabado || dia == Domingo = True
-						| otherwise = False
+--suma::TQuebrado->TQuebrado->TQuebrado
+--suma (AQuebrado a b) (AQuebrado c d)  = (AQuebrado (div((a*d + b*c), euclides (a*d + b*c)  (b*d))) (div((b*d), euclides (a*d + b*c)  (b*d))))
 
 
--- Example FinSemana Sabado = true
 
-
-data Dias2 = DiasTwo String deriving Eq
-endWeekend::Dias2->Bool
-endWeekend (DiasTwo a) | a == "Sabado" || a == "Domingo" = True
-						| otherwise = False
+--data TBooleano = Verdadero | Falso deriving Eq
+--orO::TBooleano->TBooleano->Bool
+--orO a b | (a==)= False
+--		| otherwise = True
 
 
 
 
-type Polinomio = [Float]
+type Matriz = [[Float]]
+type MatrizA = [[String]]
+--ssuma Matriz->Matriz->Matriz
 
-grado::Polinomio->Int
-grado px = length px - 1
+--dimensionMatriz::Matriz->Integer->Integer
+array::MatrizA->Integer
+array [[]] = 0
+array (x:xs) = 1  + array(xs)
 
-
-
-coeficiente::Polinomio->Int->Float
-coeficiente px pos = head [l | (l,exp)<-zip px [(length px) - 1, (length px)-2..0], exp == pos]
-
-
---evaluar::Polinomio->Float->Float
---evaluar px 
-
---type Matriz = [[Float]]
-
-
---f::Float->Float
-f x = 2*x
---sf2::Float->Float
-f2 = f . f
