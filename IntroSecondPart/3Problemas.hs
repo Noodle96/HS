@@ -1,3 +1,4 @@
+import Data.Char
 data TQuebrado = AQuebrado Integer Integer deriving Show
 
 euclides::Integer->Integer->Integer
@@ -169,14 +170,33 @@ sumarMatrices (m:mx) (n:nx) | prevalidacion (m:mx) (n:nx) == False = error "no c
 --	Producto de matrices
 --
 
+
+
 --devuelve vectores de las columnas
---[1,2,3]
+--[1,2,3]                                                          
 --[4,5,6]
 --
 -- = [1,4], [2,5],[3,6]
--- formarColumnas::Matriz->Matriz
--- formarColumnas (m:mx) | validezMatriz (m:mx) == False = error "mala matriz"
--- 								|
+convertirCol::Matriz->Matriz
+convertirCol (x:xs) | length x == 1 = [[ head x | x <- (x:xs), x/=[]]]
+                  | otherwise = [map head (x:xs)]++convertirCol(map (tail) (x:xs))
+
+
+productoV::[Float]->[Float]->Float
+productoV m n = sum[ x *y | (x,y)<-zip m n]
+
+
+
+partMul::[Float]->Matriz->[Float]
+partMul x (m:mx) = [ productoV  x f | f <-(m:mx)  ]
+
+
+
+--producto de matrices 
+
+multiplicarMatrices::Matriz->Matriz->Matriz                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            multiplicarMatrices::Matriz->Matriz->Matriz
+multiplicarMatrices [] [] = []
+multiplicarMatrices m n = [partMul mss convertirCol n | mss <- m]
 
 
 
@@ -197,4 +217,57 @@ sumarMatrices (m:mx) (n:nx) | prevalidacion (m:mx) (n:nx) == False = error "no c
 
 
 
---
+
+
+
+
+
+--menu::IO()
+--menu = do
+--	putStr "Decime tu nombre: "
+--	xs<-getLine
+--	putStr "En MAyuscula es: "
+--	putStr (map toUpper xs)
+--	putStr "\n"
+
+
+
+
+
+
+
+--definiendo lista de acciones
+--namee::[IO()]
+--namee = [putStr "Decime tu nombre: ",responder]
+--	where 
+--		responder = do
+--			xs<-getLine
+--			putStr("Hola"++" "++xs)
+
+
+
+--catch::IO a -> (IOError -> IO a)-> IO a
+
+
+
+--mostrar un archivo y   lanza una excepcion en caso no exista ndicho archivo
+--en la actual carpeta
+mostrar::IO()
+mostrar = do
+	putStr "Escribe el nombre del archivo: "
+	nombre<-getLine
+	contenido <- readFile nombre
+	putStr contenido
+
+
+
+
+--pide iterativamente un nuevo  nombre de archivo
+--mostrar1::IO()
+--mostrar1 = mostrar `catch` manejador
+--	where
+--		manejador err = do
+
+
+--putStr "Se produjo un error" ++ show err ++ "\n"
+--mostrar1
